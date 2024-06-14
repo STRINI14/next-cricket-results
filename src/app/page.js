@@ -1,95 +1,32 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import Navbar from "../../components/Navbar/Navbar";
+import style from './page.module.css'
 
-export default function Home() {
+export default async function Home() {
+  const {data} = await (await (fetch('https://api.cricapi.com/v1/matches?apikey=0cc73991-c07c-458f-ace0-2eba558559d1&offset=0'))).json()
+
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    <main>
+    <Navbar />
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+    <section className={style.content}>
+        <ul className={style.lists}>
+            <li className={style.lists}>Match</li>
+            <li className={style.lists}>Date</li>
+            <li className={style.lists}>Status</li>
+            <li style={{paddingLeft: '90px'}} className={style.lists}>Venue</li>
+            <li style={{paddingLeft: '190px'}} className={style.lists}>Type</li>
+        </ul>
+    {
+        data.map(match=><ul key={match.id} className={style.listsContent}>
+            <li className={style.listContent}>{match.name}</li>
+            <li className={style.listContent}>{match.date}</li>
+            <li className={style.listContent} style={{color:match.status === 'Match not started'? 'red' : 'green'}}>{match.status}</li>
+            <li style={{paddingRight: '90px'}} className={style.listContent}>{match.venue}</li>
+            <li style={{paddingLeft: '130px'}} className={style.listContent}>{match.matchType}</li>
+        </ul>)
+    }
+    </section>
     </main>
   );
 }
